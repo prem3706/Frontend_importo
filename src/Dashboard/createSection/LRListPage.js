@@ -435,13 +435,13 @@ export default function LRListPage({
                       {/* Tags - Responsive */}
                       <div className="flex flex-wrap gap-2 mt-auto">
                         <span className="bg-[#f6fafd] text-xs px-2.5 py-1.5 rounded-lg border border-[#ebebeb] text-[#2763ad]">
-                          🚗 {vehicle(lr)}
+                          {vehicle(lr)}
                         </span>
                         <span className="bg-[#f6fafd] text-xs px-2.5 py-1.5 rounded-lg border border-[#ebebeb] text-[#3b86d1]">
-                          📦 {packages(lr)}
+                          {packages(lr)}
                         </span>
                         <span className="bg-[#f6fafd] text-xs px-2.5 py-1.5 rounded-lg border border-[#ebebeb] text-[#2763ad] truncate max-w-[100px]">
-                          📍 {destination(lr)}
+                           {destination(lr)}
                         </span>
                       </div>
 
