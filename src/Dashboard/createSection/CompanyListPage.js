@@ -4,13 +4,7 @@ import { ArrowLeft, XCircle } from "lucide-react";
 import axios from "axios";
 
 /**
- * CompanyListPage with view-mode dropdown
- *
- * Props:
- *  - showConfirmDialog(prompt, onConfirm)  // optional
- *  - showAlert(type, message)              // optional
- *
- * Replace COMPANIES_API with your real endpoint if needed.
+ * CompanyListPage with view-mode dropdown (mobile + desktop friendly)
  */
 export default function CompanyListPage({ showConfirmDialog, showAlert }) {
   const [companies, setCompanies] = useState([]);
@@ -69,154 +63,213 @@ export default function CompanyListPage({ showConfirmDialog, showAlert }) {
             .toString()
             .toLowerCase()
             .includes(search.toLowerCase()) ||
-          (c.contact || "").toString().toLowerCase().includes(search.toLowerCase()) ||
-          (c.address || "").toString().toLowerCase().includes(search.toLowerCase()) ||
+          (c.contact || "")
+            .toString()
+            .toLowerCase()
+            .includes(search.toLowerCase()) ||
+          (c.address || "")
+            .toString()
+            .toLowerCase()
+            .includes(search.toLowerCase()) ||
           (c.gst || "").toString().toLowerCase().includes(search.toLowerCase())
         )
       )
     : [];
 
-  // mapping viewMode -> grid classes & card styles
+  // viewMode -> grid classes & card styles
   const gridClassByMode = {
     extra: "grid-cols-1",
     large: "grid-cols-1 md:grid-cols-2",
-    medium: "grid-cols-2 md:grid-cols-3",
-    small: "grid-cols-2 md:grid-cols-4",
+    medium: "grid-cols-1 sm:grid-cols-2 md:grid-cols-3",
+    small: "grid-cols-1 sm:grid-cols-2 md:grid-cols-4",
     list: "grid-cols-1",
   };
 
   const cardClassByMode = {
-    extra: "p-8 text-lg",
-    large: "p-6",
+    extra: "p-6 sm:p-8 text-base sm:text-lg",
+    large: "p-5 sm:p-6",
     medium: "p-4",
     small: "p-3 text-sm",
-    list: "p-4 flex flex-row items-center justify-between",
+    list: "p-3 sm:p-4 flex flex-row items-center justify-between",
   };
 
   return (
-    <div className="min-h-screen bg-[#f0f4f8] relative py-8">
+    <div className="min-h-screen bg-[#f0f4f8] relative py-4 sm:py-8">
       {/* Top bar */}
-      <div className="w-[96%] mx-auto rounded-xl bg-white shadow-md flex items-center gap-5 px-8 py-5 mb-10">
-        <button
-          onClick={() => navigate(`/dashboard`)}
-          className="flex items-center justify-start p-3 rounded-full bg-white shadow-md hover:bg-[#e3eeff] transition-transform hover:scale-105"
-        >
-          <ArrowLeft size={24} className="text-[#2763ad]" />
-        </button>
-
-        <svg
-          width="36"
-          height="36"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          fill="none"
-          strokeWidth="2"
-          className="text-[#3b86d1]"
-        >
-          <rect x="3" y="3" width="18" height="18" rx="3" />
-          <path d="M8 7h8M8 11h6M8 15h4" />
-        </svg>
-
-        <span className="text-[#3b86d1] flex items-center gap-4 font-bold text-2xl">
-          Companies <span className="font-medium text-[#2763ad]">({filtered.length})</span>
-        </span>
-
-        {/* View control (left of create) */}
-        <div className="relative ml-4" ref={viewRef}>
+      <div className="w-[96%] mx-auto rounded-xl bg-white shadow-md flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4 px-4 sm:px-6 lg:px-8 py-4 sm:py-5 mb-6 sm:mb-10">
+        <div className="flex items-center gap-3">
           <button
-            onClick={() => setViewOpen((s) => !s)}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#eef6ff] text-[#2763ad] hover:bg-[#e3f0ff] transition"
-            title="Change view"
+            onClick={() => navigate(`/dashboard`)}
+            className="flex items-center justify-center p-2 rounded-full bg-white shadow-md hover:bg-[#e3eeff] transition-transform hover:scale-105"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2763ad" strokeWidth="1.6">
-              <rect x="3" y="4" width="18" height="6" rx="1" />
-              <rect x="3" y="14" width="18" height="6" rx="1" />
-            </svg>
-            <span className="hidden md:inline text-sm font-medium">View</span>
+            <ArrowLeft size={22} className="text-[#2763ad]" />
           </button>
 
-          {viewOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-50 overflow-hidden">
-              <button
-                onClick={() => { setViewMode("extra"); setViewOpen(false); }}
-                className={`w-full text-left px-4 py-2 hover:bg-[#f5f9ff] ${viewMode === "extra" ? "bg-[#eef6ff]" : ""}`}
-              >
-                Extra large icons
-              </button>
-              <button
-                onClick={() => { setViewMode("large"); setViewOpen(false); }}
-                className={`w-full text-left px-4 py-2 hover:bg-[#f5f9ff] ${viewMode === "large" ? "bg-[#eef6ff]" : ""}`}
-              >
-                Large icons
-              </button>
-              <button
-                onClick={() => { setViewMode("medium"); setViewOpen(false); }}
-                className={`w-full text-left px-4 py-2 hover:bg-[#f5f9ff] ${viewMode === "medium" ? "bg-[#eef6ff]" : ""}`}
-              >
-                Medium icons
-              </button>
-              <button
-                onClick={() => { setViewMode("small"); setViewOpen(false); }}
-                className={`w-full text-left px-4 py-2 hover:bg-[#f5f9ff] ${viewMode === "small" ? "bg-[#eef6ff]" : ""}`}
-              >
-                Small icons
-              </button>
-              <button
-                onClick={() => { setViewMode("list"); setViewOpen(false); }}
-                className={`w-full text-left px-4 py-2 hover:bg-[#f5f9ff] ${viewMode === "list" ? "bg-[#eef6ff]" : ""}`}
-              >
-                List
-              </button>
-            </div>
-          )}
+          <svg
+            width="30"
+            height="30"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            fill="none"
+            strokeWidth="2"
+            className="text-[#3b86d1] hidden xs:inline"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="3" />
+            <path d="M8 7h8M8 11h6M8 15h4" />
+          </svg>
+
+          <span className="text-[#3b86d1] flex items-center gap-2 font-bold text-xl sm:text-2xl">
+            Companies{" "}
+            <span className="font-medium text-[#2763ad] text-sm sm:text-base">
+              ({filtered.length})
+            </span>
+          </span>
         </div>
 
-        <input
-          type="text"
-          className="rounded-lg border border-gray-300 px-4 py-2 w-60 text-base focus:outline-none focus:ring-2 focus:ring-[#3b86d1] hover:border-[#2763ad] transition ml-auto"
-          placeholder="Type to Search..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        {/* Right controls */}
+        <div className="flex flex-wrap gap-2 sm:gap-3 sm:ml-auto items-center mt-1 sm:mt-0">
+          {/* View control */}
+          <div className="relative" ref={viewRef}>
+            <button
+              onClick={() => setViewOpen((s) => !s)}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#eef6ff] text-[#2763ad] hover:bg-[#e3f0ff] transition text-xs sm:text-sm"
+              title="Change view"
+            >
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#2763ad"
+                strokeWidth="1.6"
+              >
+                <rect x="3" y="4" width="18" height="6" rx="1" />
+                <rect x="3" y="14" width="18" height="6" rx="1" />
+              </svg>
+              <span className="hidden md:inline font-medium">View</span>
+            </button>
 
-        <button
-          className="bg-[#3b86d1] text-white font-bold rounded-lg px-5 py-2 mx-1 shadow hover:scale-105 transition hover:bg-[#2763ad]"
-          onClick={() => navigate("/companycreateform")}
-        >
-          + CREATE NEW COMPANY
-        </button>
+            {viewOpen && (
+              <div className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-lg z-50 overflow-hidden text-sm">
+                <button
+                  onClick={() => {
+                    setViewMode("extra");
+                    setViewOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-2 hover:bg-[#f5f9ff] ${
+                    viewMode === "extra" ? "bg-[#eef6ff]" : ""
+                  }`}
+                >
+                  Extra large icons
+                </button>
+                <button
+                  onClick={() => {
+                    setViewMode("large");
+                    setViewOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-2 hover:bg-[#f5f9ff] ${
+                    viewMode === "large" ? "bg-[#eef6ff]" : ""
+                  }`}
+                >
+                  Large icons
+                </button>
+                <button
+                  onClick={() => {
+                    setViewMode("medium");
+                    setViewOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-2 hover:bg-[#f5f9ff] ${
+                    viewMode === "medium" ? "bg-[#eef6ff]" : ""
+                  }`}
+                >
+                  Medium icons
+                </button>
+                <button
+                  onClick={() => {
+                    setViewMode("small");
+                    setViewOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-2 hover:bg-[#f5f9ff] ${
+                    viewMode === "small" ? "bg-[#eef6ff]" : ""
+                  }`}
+                >
+                  Small icons
+                </button>
+                <button
+                  onClick={() => {
+                    setViewMode("list");
+                    setViewOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-2 hover:bg-[#f5f9ff] ${
+                    viewMode === "list" ? "bg-[#eef6ff]" : ""
+                  }`}
+                >
+                  List
+                </button>
+              </div>
+            )}
+          </div>
+
+          <input
+            type="text"
+            className="rounded-lg border border-gray-300 px-3 py-2 w-full xs:w-44 sm:w-60 text-sm focus:outline-none focus:ring-2 focus:ring-[#3b86d1] hover:border-[#2763ad] transition"
+            placeholder="Type to Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+
+          <button
+            className="w-full xs:w-auto bg-[#3b86d1] text-white text-sm sm:text-base font-bold rounded-lg px-4 sm:px-5 py-2 shadow hover:scale-105 transition hover:bg-[#2763ad]"
+            onClick={() => navigate("/companycreateform")}
+          >
+            + CREATE NEW COMPANY
+          </button>
+        </div>
       </div>
 
       {/* Content */}
-      <div className="container mx-auto max-w-5xl px-4">
+      <div className="container mx-auto max-w-5xl px-3 sm:px-4 pb-6">
         {filtered.length === 0 ? (
-          <div className="bg-white rounded-2xl shadow p-10 my-6 text-center text-lg text-[#3b86d1] font-semibold">
+          <div className="bg-white rounded-2xl shadow p-6 sm:p-10 my-4 sm:my-6 text-center text-base sm:text-lg text-[#3b86d1] font-semibold">
             No company records found.
           </div>
         ) : (
-          <div className={`grid gap-6 ${gridClassByMode[viewMode] || "grid-cols-1"}`}>
+          <div
+            className={`grid gap-4 sm:gap-6 ${
+              gridClassByMode[viewMode] || "grid-cols-1"
+            }`}
+          >
             {filtered.map((company) => {
               const isList = viewMode === "list";
-              const commonCard = `bg-white rounded-2xl shadow-lg border border-[#e9f0fb] ${cardClassByMode[viewMode] || ""}`;
+              const commonCard = `bg-white rounded-2xl shadow-lg border border-[#e9f0fb] ${
+                cardClassByMode[viewMode] || ""
+              }`;
 
               return (
                 <div key={company.company_id} className={commonCard}>
                   {isList ? (
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className="bg-[#3b86d1] text-white rounded-full px-3 py-1 font-semibold text-lg">
+                    // LIST VIEW
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                      <div className="flex items-center gap-3 sm:gap-4">
+                        <div className="bg-[#3b86d1] text-white rounded-full px-3 py-1 font-semibold text-base sm:text-lg">
                           {company.company_id}
                         </div>
                         <div>
-                          <div className="text-[#2763ad] font-bold">{company.company_name}</div>
-                          <div className="text-sm text-gray-600">{company.address}</div>
+                          <div className="text-[#2763ad] font-bold text-sm sm:text-base">
+                            {company.company_name}
+                          </div>
+                          <div className="text-xs sm:text-sm text-gray-600">
+                            {company.address}
+                          </div>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 sm:gap-3 self-end sm:self-auto">
                         <button
-                          onClick={() => navigate(`/company-edit/${company.company_id}`)}
-                          className="px-3 py-1 rounded-md bg-[#eef6ff] text-[#2763ad] font-medium hover:bg-[#e0efff]"
+                          onClick={() =>
+                            navigate(`/company-edit/${company.company_id}`)
+                          }
+                          className="px-3 py-1 rounded-md bg-[#eef6ff] text-[#2763ad] font-medium hover:bg-[#e0efff] text-xs sm:text-sm"
                         >
                           Edit
                         </button>
@@ -228,7 +281,8 @@ export default function CompanyListPage({ showConfirmDialog, showAlert }) {
                                   "Are you sure you want to delete this company?",
                                   () => handleDelete(company.company_id)
                                 )
-                              : window.confirm("Delete?") && handleDelete(company.company_id)
+                              : window.confirm("Delete?") &&
+                                handleDelete(company.company_id)
                           }
                           className="text-red-600 hover:text-red-800 rounded-full p-2 transition bg-[#fff0f2] hover:bg-[#fff5f7]"
                         >
@@ -237,35 +291,54 @@ export default function CompanyListPage({ showConfirmDialog, showAlert }) {
                       </div>
                     </div>
                   ) : (
-                    <div className="flex flex-col gap-3 p-4">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="bg-[#3b86d1] text-white rounded-full px-3 py-1 font-semibold text-lg">
+                    // CARD VIEW (extra/large/medium/small)
+                    <div className="flex flex-col gap-3">
+                      <div className="flex items-center gap-3 mb-1">
+                        <span className="bg-[#3b86d1] text-white rounded-full px-3 py-1 font-semibold text-base sm:text-lg">
                           {company.company_id}
                         </span>
-                        <span className="text-[#2763ad] font-bold text-base">{company.company_name}</span>
+                        <span className="text-[#2763ad] font-bold text-sm sm:text-base">
+                          {company.company_name}
+                        </span>
                       </div>
 
-                      <div className="flex flex-col gap-1 text-gray-700">
+                      <div className="flex flex-col gap-1 text-gray-700 text-xs sm:text-sm">
                         <span>
-                          Contact: <span className="font-semibold text-[#3b86d1]">{company.contact || "—"}</span>
+                          Contact:{" "}
+                          <span className="font-semibold text-[#3b86d1]">
+                            {company.contact || "—"}
+                          </span>
                         </span>
                         <span>
-                          Address: <span className="font-semibold">{company.address || "—"}</span>
+                          Address:{" "}
+                          <span className="font-semibold">
+                            {company.address || "—"}
+                          </span>
                         </span>
                         {company.gst && (
                           <span>
-                            GST: <span className="font-semibold text-[#2763ad]">{company.gst}</span>
+                            GST:{" "}
+                            <span className="font-semibold text-[#2763ad]">
+                              {company.gst}
+                            </span>
                           </span>
                         )}
                       </div>
 
-                      <div className="flex justify-between items-center">
-                        <div className="text-sm text-[#6b7a92]">Created: {company.created_at ? company.created_at.split(" ")[0] : "—"}</div>
+                      <div className="flex justify-between items-center mt-1">
+                        <div className="text-[11px] sm:text-xs text-[#6b7a92]">
+                          Created:{" "}
+                          {company.created_at
+                            ? company.created_at.split(" ")[0]
+                            : "—"}
+                        </div>
 
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 sm:gap-3">
                           <button
-                            onClick={() => navigate(`/company-edit/${company.company_id}`)}
-                            className="px-3 py-1 rounded-md bg-[#eef6ff] text-[#2763ad] font-medium hover:bg-[#e0efff]"
+                            onClick={() =>
+                              navigate(`/company-edit/${company.company_id}`)
+                            }
+                            className="px-3 py-1 rounded-md bg-[#eef6ff] text-[#2763ad] font-medium hover:bg-[#e0efff] text-xs sm:text-sm"
                           >
                             Edit
                           </button>
@@ -277,11 +350,12 @@ export default function CompanyListPage({ showConfirmDialog, showAlert }) {
                                     "Are you sure you want to delete this company?",
                                     () => handleDelete(company.company_id)
                                   )
-                                : window.confirm("Delete?") && handleDelete(company.company_id)
+                                : window.confirm("Delete?") &&
+                                  handleDelete(company.company_id)
                             }
                             className="text-red-600 hover:text-red-800 rounded-full p-2 transition bg-[#fff0f2] hover:bg-[#fff5f7]"
                           >
-                            <XCircle size={22} />
+                            <XCircle size={20} />
                           </button>
                         </div>
                       </div>

@@ -1,6 +1,6 @@
 // src/LR/LRForm.jsx
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { ArrowLeft, ChevronDown } from "lucide-react";
+import { ArrowLeft, ChevronDown, Menu, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
@@ -11,10 +11,8 @@ const GOODS_API = `${process.env.REACT_APP_API_URL}/api/goods.php`;
 const CREATE_LR_API = `${process.env.REACT_APP_API_URL}/api/lrs.php`;
 const UPDATE_LR_API = `${process.env.REACT_APP_API_URL}/api/lr_update.php`;
 
-
-
 /* ============================================
-   AutocompleteInput (shared)
+   AutocompleteInput (mobile responsive)
    ============================================ */
 function AutocompleteInput({
   label,
@@ -138,9 +136,9 @@ function AutocompleteInput({
   };
 
   return (
-    <div ref={containerRef} className="relative flex flex-col">
+    <div ref={containerRef} className="relative flex flex-col w-full">
       {label && (
-        <label className="text-sm text-[#1E3A8A] mb-1 font-semibold">
+        <label className="text-sm sm:text-base text-[#1E3A8A] mb-1 sm:mb-2 font-semibold">
           {label}
         </label>
       )}
@@ -152,7 +150,8 @@ function AutocompleteInput({
           value={value || ""}
           placeholder={placeholder}
           className={`w-full bg-transparent border-b-2 border-[#BFC9DF] 
-                 focus:border-[#1E3A8A] py-2 outline-none ${className}`}
+                     py-3 sm:py-2 outline-none text-sm sm:text-base 
+                     focus:border-[#1E3A8A] pr-8 ${className}`}
           onChange={(e) => {
             onChange(e.target.value); // manual typing allowed
             if (mode === "full") {
@@ -197,10 +196,10 @@ function AutocompleteInput({
         <button
           type="button"
           onClick={toggleDropdown}
-          className="absolute right-0 top-1/2 -translate-y-1/2 p-1"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-1 sm:p-1.5 hover:bg-gray-100 rounded-full transition-colors"
           aria-label="Toggle list"
         >
-          <ChevronDown className="text-[#1E3A8A]" />
+          <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-[#1E3A8A]" />
         </button>
       </div>
 
@@ -208,7 +207,7 @@ function AutocompleteInput({
         <div
           id={`${name || "ac"}-listbox`}
           role="listbox"
-          className="absolute left-0 right-0 top-full mt-2 bg-white rounded-lg shadow-lg max-h-56 overflow-y-auto z-50"
+          className="absolute left-0 right-0 top-full mt-1 sm:mt-2 bg-white rounded-lg shadow-xl max-h-48 sm:max-h-56 overflow-y-auto z-50 border border-gray-200"
         >
           {list.map((it, idx) => {
             const isActive = highlight === idx;
@@ -220,8 +219,8 @@ function AutocompleteInput({
                 onMouseEnter={() => setHighlight(idx)}
                 onMouseLeave={() => setHighlight(-1)}
                 onClick={() => selectItem(it)}
-                className={`px-4 py-3 cursor-pointer ${isActive ? "bg-[#E6F0FA]" : "hover:bg-[#EEF3F8]"
-                  }`}
+                className={`px-3 sm:px-4 py-2.5 sm:py-3 cursor-pointer text-sm sm:text-base 
+                           ${isActive ? "bg-[#E6F0FA]" : "hover:bg-[#EEF3F8]"}`}
               >
                 {getLabel(it)}
               </div>
@@ -234,7 +233,7 @@ function AutocompleteInput({
 }
 
 /* =============================
-   LRForm main (create + update)
+   LRForm main (fully responsive)
    ============================= */
 export default function LRForm({ showAlert }) {
   const navigate = useNavigate();
@@ -339,12 +338,12 @@ export default function LRForm({ showAlert }) {
         setGoods(
           Array.isArray(lr.goods) && lr.goods.length
             ? lr.goods.map((g) => ({
-              name: g.name || g.goods_name || "",
-              product_id: g.goods_id || g.product_id || null,
-              qty: g.qty || "",
-              weight: g.weight || "",
-              price: g.price || "",
-            }))
+                name: g.name || g.goods_name || "",
+                product_id: g.goods_id || g.product_id || null,
+                qty: g.qty || "",
+                weight: g.weight || "",
+                price: g.price || "",
+              }))
             : [{ name: "", product_id: null, qty: "", weight: "", price: "" }]
         );
       } catch (e) {
@@ -403,7 +402,6 @@ export default function LRForm({ showAlert }) {
     }
 
     // consignor / consignee validation
-    // NEW: naam required, ID optional (manual + list dono allowed)
     if (!form.consignor) {
       showAlert?.("error", "Consignor name required.");
       return;
@@ -412,15 +410,6 @@ export default function LRForm({ showAlert }) {
       showAlert?.("error", "Consignee name required.");
       return;
     }
-
-    // Agar ID missing hai to sirf info alert (manual entry samjho)
-    if (!form.consignor_id) {
-      console.warn("Consignor ID missing, manual consignor used");
-    }
-    if (!form.consignee_id) {
-      console.warn("Consignee ID missing, manual consignee used");
-    }
-
 
     const payload = {
       lr_number: form.lrNumber,
@@ -457,17 +446,14 @@ export default function LRForm({ showAlert }) {
       setSaving(true);
       let resp;
       if (isEdit) {
-        // ✅ UPDATE alag file pe
         resp = await axios.put(UPDATE_LR_API, payload, {
           headers: { "Content-Type": "application/json" },
         });
       } else {
-        // ✅ CREATE purane lrs.php pe hi
         resp = await axios.post(CREATE_LR_API, payload, {
           headers: { "Content-Type": "application/json" },
         });
       }
-
 
       console.log("LR FORM resp:", resp.data);
 
@@ -481,7 +467,7 @@ export default function LRForm({ showAlert }) {
         showAlert?.(
           "error",
           (isEdit ? "Update failed: " : "Create failed: ") +
-          (resp.data?.message || "unknown")
+            (resp.data?.message || "unknown")
         );
         console.error("LR form failed response:", resp.data);
       }
@@ -501,38 +487,42 @@ export default function LRForm({ showAlert }) {
   const buttonLabel = isEdit ? "Update LR" : "Create LR";
 
   return (
-    <div className="min-h-screen bg-[#EEF3F8] p-6">
+    <div className="min-h-screen bg-[#EEF3F8] p-4 sm:p-6 relative">
+      {/* Mobile Back Button */}
       <button
         onClick={() => navigate(-1)}
-        className="fixed top-5 left-5 bg-white shadow rounded-full p-2"
+        className="fixed sm:static top-4 left-4 z-50 bg-white shadow-lg rounded-xl p-3 sm:p-2 hover:shadow-xl transition-all"
       >
-        <ArrowLeft className="text-blue-700" />
+        <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 text-[#1E3A8A]" />
       </button>
 
-      <h1 className="text-3xl text-center font-bold text-[#1E3A8A] mb-8">
-        {title}
-      </h1>
+      {/* Header */}
+      <div className="text-center mb-6 sm:mb-8 pt-16 sm:pt-0">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#1E3A8A] leading-tight">
+          {title}
+        </h1>
+      </div>
 
-      <form onSubmit={submit} className="max-w-5xl mx-auto space-y-8">
-        {/* Header grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* LR Number – read-only */}
+      <form onSubmit={submit} className="max-w-5xl mx-auto space-y-6 sm:space-y-8">
+        {/* Header Section - Stacked on mobile */}
+        <div className="space-y-6 sm:space-y-0 grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          {/* LR Number */}
           <div className="flex flex-col">
-            <label className="text-[#1E3A8A] font-semibold mb-1">
+            <label className="text-sm sm:text-base text-[#1E3A8A] font-semibold mb-2">
               LR Number
             </label>
             <input
               type="text"
               value={form.lrNumber}
               readOnly
-              className="w-full border-b-2 border-[#BFC9DF] py-2 bg-transparent text-gray-900 cursor-default"
+              className="w-full border-b-2 border-[#BFC9DF] py-3 sm:py-2 bg-transparent text-gray-900 cursor-default text-sm sm:text-base px-2"
               placeholder="Auto generated"
             />
           </div>
 
-          {/* Date (manual) */}
+          {/* Date */}
           <div className="flex flex-col">
-            <label className="text-[#1E3A8A] font-semibold mb-1">
+            <label className="text-sm sm:text-base text-[#1E3A8A] font-semibold mb-2">
               Date
             </label>
             <input
@@ -540,7 +530,7 @@ export default function LRForm({ showAlert }) {
               value={form.date}
               onChange={(e) => setField("date", e.target.value)}
               min={!isEdit ? getToday() : undefined}
-              className="w-full border-b-2 border-[#BFC9DF] py-2 bg-transparent"
+              className="w-full border-b-2 border-[#BFC9DF] py-3 sm:py-2 bg-transparent text-sm sm:text-base px-2"
             />
           </div>
 
@@ -580,21 +570,21 @@ export default function LRForm({ showAlert }) {
             placeholder="Type or select vehicle..."
           />
 
-          {/* Driver display (read only text) */}
+          {/* Driver */}
           <div className="flex flex-col">
-            <label className="text-[#1E3A8A] font-semibold mb-1">
+            <label className="text-sm sm:text-base text-[#1E3A8A] font-semibold mb-2">
               Driver
             </label>
             <input
               value={form.driver}
               readOnly
-              className="w-full border-b-2 border-[#BFC9DF] py-2 bg-transparent text-gray-800"
+              className="w-full border-b-2 border-[#BFC9DF] py-3 sm:py-2 bg-transparent text-gray-800 text-sm sm:text-base px-2"
               placeholder="Select vehicle to auto-fill driver"
             />
           </div>
 
-          {/* Consignor */}
-          <div>
+          {/* Consignor + GST */}
+          <div className="space-y-4">
             <AutocompleteInput
               label="Consignor"
               name="consignor"
@@ -609,9 +599,9 @@ export default function LRForm({ showAlert }) {
                   setField(
                     "consignor_gst",
                     objOrString.gst_no ??
-                    objOrString.gstin ??
-                    objOrString.gst ??
-                    ""
+                      objOrString.gstin ??
+                      objOrString.gst ??
+                      ""
                   );
                 } else {
                   setField("consignor", objOrString);
@@ -622,8 +612,8 @@ export default function LRForm({ showAlert }) {
               placeholder="Type consignor..."
             />
 
-            <div className="mt-7">
-              <label className="text-sm text-[#1E3A8A] mb-1 font-semibold">
+            <div>
+              <label className="text-xs sm:text-sm text-[#1E3A8A] mb-2 font-semibold block">
                 Consignor GST / GSTIN
               </label>
               <input
@@ -632,13 +622,13 @@ export default function LRForm({ showAlert }) {
                   setField("consignor_gst", e.target.value)
                 }
                 placeholder="Consignor GST number"
-                className="w-full border-b-2 border-[#BFC9DF] py-2 bg-transparent"
+                className="w-full border-b-2 border-[#BFC9DF] py-3 sm:py-2 bg-transparent text-sm sm:text-base px-2"
               />
             </div>
           </div>
 
-          {/* Consignee */}
-          <div>
+          {/* Consignee + GST */}
+          <div className="space-y-4">
             <AutocompleteInput
               label="Consignee"
               name="consignee"
@@ -653,9 +643,9 @@ export default function LRForm({ showAlert }) {
                   setField(
                     "consignee_gst",
                     objOrString.gst_no ??
-                    objOrString.gstin ??
-                    objOrString.gst ??
-                    ""
+                      objOrString.gstin ??
+                      objOrString.gst ??
+                      ""
                   );
                 } else {
                   setField("consignee", objOrString);
@@ -666,8 +656,8 @@ export default function LRForm({ showAlert }) {
               placeholder="Type consignee..."
             />
 
-            <div className="mt-7">
-              <label className="text-sm text-[#1E3A8A] mb-1 font-semibold">
+            <div>
+              <label className="text-xs sm:text-sm text-[#1E3A8A] mb-2 font-semibold block">
                 Consignee GST / GSTIN
               </label>
               <input
@@ -676,12 +666,12 @@ export default function LRForm({ showAlert }) {
                   setField("consignee_gst", e.target.value)
                 }
                 placeholder="Consignee GST number"
-                className="w-full border-b-2 border-[#BFC9DF] py-2 bg-transparent"
+                className="w-full border-b-2 border-[#BFC9DF] py-3 sm:py-2 bg-transparent text-sm sm:text-base px-2"
               />
             </div>
           </div>
 
-          {/* Source / Destination */}
+          {/* Source */}
           <AutocompleteInput
             label="Source Branch"
             name="source"
@@ -690,6 +680,8 @@ export default function LRForm({ showAlert }) {
             mode="full"
             onChange={(v) => setField("source", v)}
           />
+
+          {/* Destination */}
           <AutocompleteInput
             label="Destination Branch"
             name="destination"
@@ -700,163 +692,178 @@ export default function LRForm({ showAlert }) {
           />
 
           {/* Note */}
-          <div className="md:col-span-2">
-            <label className="text-[#1E3A8A] font-semibold mb-1">
+          <div className="md:col-span-2 bg-blue-50 p-4 rounded-xl">
+            <label className="text-sm sm:text-base text-[#1E3A8A] font-semibold mb-2 block">
               Note
             </label>
-            <div className="text-sm text-[#6B7A92]">
-              Total Packages will be calculated from Goods → Qty values
-              below.
+            <div className="text-xs sm:text-sm text-[#6B7A92]">
+              Total Packages will be calculated from Goods → Qty values below.
             </div>
           </div>
         </div>
 
-        {/* Goods */}
-        <div>
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-[#1E3A8A]">
+        {/* Goods Section - Mobile Optimized */}
+        <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-4 gap-4 sm:gap-0">
+            <h2 className="text-xl sm:text-2xl font-bold text-[#1E3A8A] flex-1">
               Goods Details
             </h2>
             <button
               type="button"
               onClick={addGood}
-              className="px-4 py-2 bg-[#1E3A8A] text-white rounded"
+              className="px-6 sm:px-4 py-2.5 sm:py-2 bg-[#1E3A8A] text-white rounded-lg font-medium hover:bg-[#163A6D] transition-colors text-sm sm:text-base shadow-md"
             >
-              + Add
+              + Add Goods
             </button>
           </div>
 
-          {goods.map((g, idx) => (
-            <div
-              key={g.product_id ?? idx}
-              className="flex items-center gap-4 bg-white rounded-xl p-3 shadow mb-3"
-              aria-label={`goods-row-${idx}`}
-            >
-              <div className="flex-1 min-w-0">
-                <label className="text-xs text-[#6B7A92] mb-1 block">
-                  Goods
-                </label>
-                <AutocompleteInput
-                  label={null}
-                  name={`goods-${idx}`}
-                  value={g.name}
-                  apiUrl={GOODS_API}
-                  mode="search"
-                  returnObjectOnSelect={true}
-                  onChange={(objOrString) => {
-                    if (objOrString && typeof objOrString === "object") {
-                      updateGood(idx, {
-                        name:
-                          objOrString.name ??
-                          objOrString.product_name ??
-                          "",
-                        product_id:
-                          objOrString.goods_id ??
-                          objOrString.id ??
-                          objOrString.product_id ??
-                          null,
-                      });
-                    } else {
-                      updateGood(idx, {
-                        name: objOrString,
-                        product_id: null,
-                      });
-                    }
-                  }}
-                  placeholder="Type or select goods..."
-                />
+          {/* Goods Rows */}
+          <div className="space-y-4">
+            {goods.map((g, idx) => (
+              <div
+                key={g.product_id ?? idx}
+                className="bg-gray-50 rounded-xl p-4 sm:p-3 border border-gray-200 hover:shadow-md transition-all"
+              >
+                <div className="flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-4">
+                  {/* Goods Name - Full width on mobile */}
+                  <div className="flex-1 min-w-0 lg:w-1/2">
+                    <label className="text-xs sm:text-sm text-[#6B7A92] mb-1.5 block">
+                      Goods
+                    </label>
+                    <AutocompleteInput
+                      label={null}
+                      name={`goods-${idx}`}
+                      value={g.name}
+                      apiUrl={GOODS_API}
+                      mode="search"
+                      returnObjectOnSelect={true}
+                      onChange={(objOrString) => {
+                        if (objOrString && typeof objOrString === "object") {
+                          updateGood(idx, {
+                            name:
+                              objOrString.name ??
+                              objOrString.product_name ??
+                              "",
+                            product_id:
+                              objOrString.goods_id ??
+                              objOrString.id ??
+                              objOrString.product_id ??
+                              null,
+                          });
+                        } else {
+                          updateGood(idx, {
+                            name: objOrString,
+                            product_id: null,
+                          });
+                        }
+                      }}
+                      placeholder="Type or select goods..."
+                    />
+                  </div>
+
+                  {/* Numeric Fields - Stacked on mobile, row on desktop */}
+                  <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 w-full lg:w-1/2 lg:pl-4">
+                    <div className="flex-1">
+                      <label className="text-xs sm:text-sm text-[#6B7A92] mb-1.5 block text-right sm:text-left">
+                        Qty
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={g.qty}
+                        onChange={(e) =>
+                          updateGood(idx, { qty: e.target.value })
+                        }
+                        className="w-full text-right lg:text-left border-b border-[#E6EDF7] py-2.5 sm:py-1 bg-transparent outline-none text-sm placeholder-gray-500 px-2"
+                        placeholder="0"
+                      />
+                    </div>
+
+                    <div className="flex-1">
+                      <label className="text-xs sm:text-sm text-[#6B7A92] mb-1.5 block text-right sm:text-left">
+                        Weight
+                      </label>
+                      <input
+                        value={g.weight}
+                        onChange={(e) =>
+                          updateGood(idx, { weight: e.target.value })
+                        }
+                        className="w-full text-right lg:text-left border-b border-[#E6EDF7] py-2.5 sm:py-1 bg-transparent outline-none text-sm placeholder-gray-500 px-2"
+                        placeholder="kg"
+                      />
+                    </div>
+
+                    <div className="flex-1">
+                      <label className="text-xs sm:text-sm text-[#6B7A92] mb-1.5 block text-right sm:text-left">
+                        Price (₹)
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={g.price}
+                        onChange={(e) =>
+                          updateGood(idx, { price: e.target.value })
+                        }
+                        className="w-full text-right lg:text-left border-b border-[#E6EDF7] py-2.5 sm:py-1 bg-transparent outline-none text-sm placeholder-gray-500 px-2"
+                        placeholder="0"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Delete Button */}
+                  <div className="flex justify-end lg:justify-center pt-1 sm:pt-0">
+                    <button
+                      type="button"
+                      onClick={() => removeGood(idx)}
+                      className="flex items-center justify-center w-10 h-10 sm:w-8 sm:h-8 lg:w-10 lg:h-10 rounded-full bg-white border-2 border-red-200 text-red-500 hover:bg-red-50 shadow-sm hover:shadow-md transition-all hover:scale-105"
+                      title="Remove item"
+                    >
+                      <X className="w-4 h-4 sm:w-3 sm:h-3 lg:w-4 lg:h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Totals Card */}
+          <div className="mt-8 p-5 sm:p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl border-2 border-blue-100 shadow-lg">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-6 sm:gap-0">
+              <div className="flex-1">
+                <div className="text-xs sm:text-sm text-[#6B7A92] uppercase tracking-wide">
+                  Total Packages (computed)
+                </div>
+                <div className="text-3xl sm:text-2xl lg:text-3xl font-black text-[#1E3A8A] mt-1">
+                  {totalPackages}
+                </div>
               </div>
 
-              <div className="w-20 min-w-[80px]">
-                <label className="text-xs text-[#6B7A92] mb-1 block text-right">
-                  Qty
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={g.qty}
-                  onChange={(e) =>
-                    updateGood(idx, { qty: e.target.value })
-                  }
-                  className="w-full text-right border-b border-[#E6EDF7] py-1 bg-transparent outline-none"
-                  placeholder="0"
-                />
-              </div>
-
-              <div className="w-28 min-w-[90px]">
-                <label className="text-xs text-[#6B7A92] mb-1 block text-right">
-                  Weight
-                </label>
-                <input
-                  value={g.weight}
-                  onChange={(e) =>
-                    updateGood(idx, { weight: e.target.value })
-                  }
-                  className="w-full text-right border-b border-[#E6EDF7] py-1 bg-transparent outline-none"
-                  placeholder="kg"
-                />
-              </div>
-
-              <div className="w-28 min-w-[90px]">
-                <label className="text-xs text-[#6B7A92] mb-1 block text-right">
-                  Price
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={g.price}
-                  onChange={(e) =>
-                    updateGood(idx, { price: e.target.value })
-                  }
-                  className="w-full text-right border-b border-[#E6EDF7] py-1 bg-transparent outline-none"
-                  placeholder="₹"
-                />
-              </div>
-
-              <div className="pl-2">
-                <button
-                  type="button"
-                  onClick={() => removeGood(idx)}
-                  className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white border border-red-200 text-red-500 hover:bg-red-50 shadow-sm"
-                  title="Remove item"
-                >
-                  ×
-                </button>
-              </div>
-            </div>
-          ))}
-
-          <div className="bg-white rounded-xl p-4 shadow mb-6 flex items-center justify-between">
-            <div>
-              <div className="text-sm text-[#6B7A92]">
-                Total Packages (computed)
-              </div>
-              <div className="text-2xl font-bold text-[#1E3A8A]">
-                {totalPackages}
-              </div>
-            </div>
-
-            <div>
-              <div className="text-sm text-[#6B7A92]">Total Value</div>
-              <div className="text-2xl font-bold text-[#1E3A8A]">
-                ₹ {total.toFixed(2)}
+              <div className="flex-1 text-right sm:text-left lg:text-right">
+                <div className="text-xs sm:text-sm text-[#6B7A92] uppercase tracking-wide">
+                  Total Value
+                </div>
+                <div className="text-3xl sm:text-2xl lg:text-3xl font-black text-[#1E3A8A] mt-1">
+                  ₹ {total.toLocaleString("en-IN", { maximumFractionDigits: 2 })}
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="flex justify-between items-center">
-          <div className="text-2xl font-bold text-[#1E3A8A]">
-            ₹ {total.toFixed(2)}
+        {/* Submit Footer - Fixed on mobile */}
+        <div className="fixed bottom-0 left-0 right-0 sm:static bg-white sm:bg-transparent p-4 sm:p-0 shadow-lg sm:shadow-none border-t sm:border-t-0 z-40 sm:z-auto">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-8 pt-4 sm:pt-0">
+            <div className="text-xl sm:text-2xl font-black text-[#1E3A8A] text-center sm:text-left">
+              ₹ {total.toLocaleString("en-IN", { maximumFractionDigits: 2 })}
+            </div>
+            <button
+              type="submit"
+              disabled={saving}
+              className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-3 bg-gradient-to-r from-[#1E3A8A] to-[#163A6D] text-white rounded-2xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl hover:scale-[1.02] transition-all disabled:opacity-60 disabled:cursor-not-allowed disabled:shadow-md"
+            >
+              {saving ? "Saving..." : buttonLabel}
+            </button>
           </div>
-          <button
-            type="submit"
-            disabled={saving}
-            className="px-10 py-3 bg-[#1E3A8A] text-white rounded-full disabled:opacity-60"
-          >
-            {saving ? "Saving..." : buttonLabel}
-          </button>
         </div>
       </form>
     </div>

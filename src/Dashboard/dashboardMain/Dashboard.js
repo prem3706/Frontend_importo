@@ -25,7 +25,7 @@ export default function Dashboard() {
   });
   const [monthlyData, setMonthlyData] = useState([]); // chart data
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     let cancelled = false;
 
@@ -127,22 +127,22 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f0f4f8]">
-      <main className="flex-1 container mx-auto flex justify-center items-start pt-4 mt-[100px]">
-        <div className="flex w-full max-w-6xl gap-8 px-4">
+      <main className="flex-1 container mx-auto flex justify-center items-start pt-4 mt-[80px] md:mt-[100px] px-3 sm:px-4">
+        <div className="flex w-full max-w-6xl gap-4 md:gap-8 flex-col lg:flex-row">
           {/* LEFT COLUMN */}
-          <div className="basis-2/3 flex flex-col gap-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+          <div className="w-full lg:basis-2/3 flex flex-col gap-6 md:gap-8">
+            {/* Top two big boxes */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 w-full">
               {/* Create LR Box */}
               <div
                 onClick={() => navigate("/lrcreateform")}
-                className="relative cursor-pointer bg-white bg-opacity-90 backdrop-blur rounded-3xl shadow-xl hover:shadow-2xl transition p-8 flex flex-col items-start justify-center gap-3 text-xl font-semibold text-[#3b86d1] select-none border-2 border-transparent hover:scale-[1.02]"
-                style={{ minHeight: "120px" }}
+                className="relative cursor-pointer bg-white bg-opacity-90 backdrop-blur rounded-2xl md:rounded-3xl shadow-lg md:shadow-xl hover:shadow-2xl transition p-5 md:p-8 flex flex-col items-start justify-center gap-3 text-xl font-semibold text-[#3b86d1] select-none border-2 border-transparent hover:scale-[1.01] md:hover:scale-[1.02]"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 md:gap-4">
                   <div className="p-3 rounded-full bg-[#eaf6ff] border border-[#d6eefe]">
                     <svg
-                      width="28"
-                      height="28"
+                      width="26"
+                      height="26"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="#21bf06"
@@ -155,10 +155,10 @@ export default function Dashboard() {
                     </svg>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-[#2763ad]">
+                    <div className="text-xl md:text-2xl font-bold text-[#2763ad]">
                       Create LR
                     </div>
-                    <div className="text-sm text-[#6b7280] mt-1">
+                    <div className="text-xs md:text-sm text-[#6b7280] mt-1">
                       Quickly create a new LR and add goods
                     </div>
                   </div>
@@ -168,14 +168,13 @@ export default function Dashboard() {
               {/* LR List Box */}
               <div
                 onClick={() => navigate("/lrlistpage")}
-                className="relative cursor-pointer bg-white bg-opacity-90 backdrop-blur rounded-3xl shadow-xl hover:shadow-2xl transition p-8 flex flex-col items-start justify-center gap-3 text-xl font-semibold text-[#3b86d1] select-none border-2 border-transparent hover:scale-[1.02]"
-                style={{ minHeight: "120px" }}
+                className="relative cursor-pointer bg-white bg-opacity-90 backdrop-blur rounded-2xl md:rounded-3xl shadow-lg md:shadow-xl hover:shadow-2xl transition p-5 md:p-8 flex flex-col items-start justify-center gap-3 text-xl font-semibold text-[#3b86d1] select-none border-2 border-transparent hover:scale-[1.01] md:hover:scale-[1.02]"
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 md:gap-4">
                   <div className="p-3 rounded-full bg-[#fff4e6] border border-[#ffe0b3]">
                     <svg
-                      width="28"
-                      height="28"
+                      width="26"
+                      height="26"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="#f59e0b"
@@ -189,10 +188,10 @@ export default function Dashboard() {
                     </svg>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-[#2763ad]">
+                    <div className="text-xl md:text-2xl font-bold text-[#2763ad]">
                       LR List
                     </div>
-                    <div className="text-sm text-[#6b7280] mt-1">
+                    <div className="text-xs md:text-sm text-[#6b7280] mt-1">
                       View, edit & manage all LR records
                     </div>
                   </div>
@@ -201,35 +200,39 @@ export default function Dashboard() {
             </div>
 
             {/* Two small panels */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white rounded-2xl p-6 shadow-md border border-[#eef6ff]">
-                <div className="text-sm text-gray-500">Pending Actions</div>
-                <div className="mt-2 text-lg font-semibold text-[#3b86d1]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              <div className="bg-white rounded-2xl p-4 md:p-6 shadow-md border border-[#eef6ff]">
+                <div className="text-xs md:text-sm text-gray-500">
+                  Pending Actions
+                </div>
+                <div className="mt-2 text-lg md:text-xl font-semibold text-[#3b86d1]">
                   3 items
                 </div>
-                <div className="text-xs text-gray-400 mt-2">
+                <div className="text-[11px] md:text-xs text-gray-400 mt-2">
                   Approve shipments, confirm receipts
                 </div>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-md border border-[#eef6ff]">
-                <div className="text-sm text-gray-500">Shortcuts</div>
+              <div className="bg-white rounded-2xl p-4 md:p-6 shadow-md border border-[#eef6ff]">
+                <div className="text-xs md:text-sm text-gray-500">
+                  Shortcuts
+                </div>
                 <div className="mt-2 flex gap-2 flex-wrap">
                   <button
                     onClick={() => navigate("/brancheslistpage")}
-                    className="px-3 py-1 rounded-md bg-[#eef6ff] text-[#2763ad] border border-[#d6eefe]"
+                    className="px-3 py-1 rounded-md bg-[#eef6ff] text-[#2763ad] border border-[#d6eefe] text-xs md:text-sm"
                   >
                     Branches
                   </button>
                   <button
                     onClick={() => navigate("/companylistpage")}
-                    className="px-3 py-1 rounded-md bg-[#eef6ff] text-[#2763ad] border border-[#d6eefe]"
+                    className="px-3 py-1 rounded-md bg-[#eef6ff] text-[#2763ad] border border-[#d6eefe] text-xs md:text-sm"
                   >
                     Companies
                   </button>
                   <button
                     onClick={() => navigate("/vehiclelistpage")}
-                    className="px-3 py-1 rounded-md bg-[#eef6ff] text-[#2763ad] border border-[#d6eefe]"
+                    className="px-3 py-1 rounded-md bg-[#eef6ff] text-[#2763ad] border border-[#d6eefe] text-xs md:text-sm"
                   >
                     Vehicles
                   </button>
@@ -238,22 +241,22 @@ export default function Dashboard() {
             </div>
 
             {/* Monthly Overview with chart */}
-            <div className="bg-white rounded-2xl p-6 shadow-md border border-[#eef6ff]">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-[#23294a]">
+            <div className="bg-white rounded-2xl p-4 md:p-6 shadow-md border border-[#eef6ff]">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
+                <h3 className="text-base md:text-lg font-semibold text-[#23294a]">
                   Monthly Overview
                 </h3>
-                <div className="text-sm text-gray-400">
+                <div className="text-xs md:text-sm text-gray-400">
                   Last 6 months
                 </div>
               </div>
 
               {monthlyData.length === 0 ? (
-                <div className="mt-6 text-sm text-gray-400 text-center">
+                <div className="mt-4 md:mt-6 text-xs md:text-sm text-gray-400 text-center">
                   No LR data available for the last 6 months.
                 </div>
               ) : (
-                <div className="w-full h-64">
+                <div className="w-full h-52 md:h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart
                       data={monthlyData}
@@ -302,42 +305,50 @@ export default function Dashboard() {
           </div>
 
           {/* RIGHT COLUMN */}
-          <div className="basis-1/3 flex flex-col gap-6">
+          <div className="w-full lg:basis-1/3 flex flex-col gap-4 md:gap-6">
             {/* Stats small cards */}
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3 md:gap-4">
               <div className="bg-white rounded-xl p-4 shadow-sm border border-[#eef6ff]">
-                <div className="text-sm text-gray-500">This Month LRs</div>
-                <div className="mt-1 text-2xl font-bold text-[#21bf06]">
+                <div className="text-xs md:text-sm text-gray-500">
+                  This Month LRs
+                </div>
+                <div className="mt-1 text-xl md:text-2xl font-bold text-[#21bf06]">
                   {stats.this_month_lrs ?? 0}
                 </div>
               </div>
 
               <div className="bg-white rounded-xl p-4 shadow-sm border border-[#eef6ff]">
-                <div className="text-sm text-gray-500">Total Branches</div>
-                <div className="mt-1 text-2xl font-bold text-[#3b86d1]">
+                <div className="text-xs md:text-sm text-gray-500">
+                  Total Branches
+                </div>
+                <div className="mt-1 text-xl md:text-2xl font-bold text-[#3b86d1]">
                   {stats.total_branches ?? 0}
                 </div>
               </div>
 
               <div className="bg-white rounded-xl p-4 shadow-sm border border-[#eef6ff]">
-                <div className="text-sm text-gray-500">Companies</div>
-                <div className="mt-1 text-2xl font-bold text-[#2763ad]">
+                <div className="text-xs md:text-sm text-gray-500">
+                  Companies
+                </div>
+                <div className="mt-1 text-xl md:text-2xl font-bold text-[#2763ad]">
                   {stats.total_companies ?? 0}
                 </div>
               </div>
             </div>
 
             {/* Quick logout/action box */}
-            <div className="bg-white rounded-xl p-4 shadow-sm border border-[#eef6ff]">
-              <div className="flex items-center justify-between">
+            <div className="bg-white rounded-xl p-4 md:p-5 shadow-sm border border-[#eef6ff]">
+              <div className="flex items-center justify-between gap-3">
                 <div>
-                  <div className="text-sm text-gray-500">Signed in as</div>
-                  <div className="font-semibold text-[#3b86d1]">
+                  <div className="text-xs md:text-sm text-gray-500">
+                    Signed in as
+                  </div>
+                  <div className="text-sm md:text-base font-semibold text-[#3b86d1]">
                     {user?.transportName}
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center bg-[#3b86d1] text-white text-lg font-bold border-2 border-white shadow">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden flex items-center justify-center bg-[#3b86d1] text-white text-base md:text-lg font-bold border-2 border-white shadow">
                     {user?.photo_url ? (
                       <img
                         src={user.photo_url}
@@ -358,13 +369,13 @@ export default function Dashboard() {
               <div className="mt-4 flex gap-2">
                 <button
                   onClick={() => navigate("/userprofile")}
-                  className="flex-1 px-3 py-2 rounded-md bg-[#eef6ff] text-[#2763ad] border border-[#d6eefe]"
+                  className="flex-1 px-3 py-2 rounded-md bg-[#eef6ff] text-[#2763ad] border border-[#d6eefe] text-xs md:text-sm"
                 >
                   Profile
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="px-3 py-2 rounded-md bg-white border border-[#e6eefc] text-[#3b86d1]"
+                  className="px-3 py-2 rounded-md bg-white border border-[#e6eefc] text-[#3b86d1] text-xs md:text-sm"
                 >
                   Sign out
                 </button>
@@ -375,65 +386,70 @@ export default function Dashboard() {
       </main>
 
       {/* FOOTER */}
-      <footer className="mt-10 text-center py-10 bg-[#334460] text-[#f0f4f8] rounded-t-2xl">
-  <div className="container mx-auto">
-    <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-8 justify-between px-4">
+      <footer className="mt-8 md:mt-10 text-center py-6 md:py-10 bg-[#334460] text-[#f0f4f8] rounded-t-2xl px-3">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex flex-col md:flex-row items-stretch md:items-start gap-4 md:gap-8 justify-between">
+            {/* USER CARD */}
+            <div className="flex flex-1 items-center md:items-center gap-3 md:gap-4 bg-white rounded-2xl p-4 md:p-5 shadow-md border border-gray-100">
+              <div className="w-14 h-14 md:w-20 md:h-20 rounded-full overflow-hidden flex items-center justify-center bg-[#3b86d1] text-white text-lg md:text-2xl font-bold">
+                {user?.photo_url ? (
+                  <img
+                    src={user.photo_url}
+                    alt="avatar"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span>
+                    {(user?.transportName || "U")
+                      .slice(0, 1)
+                      .toUpperCase()}
+                  </span>
+                )}
+              </div>
 
-      {/* ================= USER CARD ================= */}
-      <div className="flex items-center gap-4 bg-white rounded-2xl p-5 shadow-md border border-gray-100">
-        <div className="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center bg-[#3b86d1] text-white text-2xl font-bold">
-          {user?.photo_url ? (
-            <img
-              src={user.photo_url}
-              alt="avatar"
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <span>
-              {(user?.transportName || "U")
-                .slice(0, 1)
-                .toUpperCase()}
-            </span>
-          )}
-        </div>
+              <div className="text-left">
+                <div className="text-sm md:text-lg font-bold text-[#3b86d1]">
+                  {user?.transportName}
+                </div>
+                <div className="text-xs md:text-sm text-gray-600">
+                  {user?.email}
+                </div>
+                <div className="mt-1 text-[11px] md:text-xs text-gray-500">
+                  Logged in & ready to manage consignments 🚚
+                </div>
+              </div>
+            </div>
 
-        <div className="text-left">
-          <div className="text-lg font-bold text-[#3b86d1]">
-            {user?.transportName}
+            {/* QUICK INFO */}
+            <div className="flex flex-col sm:flex-row md:flex-col gap-3 md:gap-4 w-full md:w-auto">
+              <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-3 md:p-4 text-center">
+                <div className="text-[10px] md:text-xs text-gray-500">
+                  Account Status
+                </div>
+                <div className="mt-2 text-xs md:text-sm font-bold text-[#21bf06]">
+                  ● Active
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-3 md:p-4 text-center">
+                <div className="text-[10px] md:text-xs text-gray-500">
+                  Support
+                </div>
+                <div className="mt-2 text-xs md:text-sm font-semibold text-[#3b86d1]">
+                  support@importo.in
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="text-sm text-gray-600">{user?.email}</div>
-          <div className="mt-1 text-xs text-gray-500">
-            Logged in & ready to manage consignments 🚚
+
+          {/* BOTTOM BAR */}
+          <div className="mt-5 md:mt-8 text-center text-[10px] md:text-xs text-gray-300">
+            © {new Date().getFullYear()}{" "}
+            <span className="font-semibold">Importo Logistics</span> — Built
+            for speed, reliability & growth.
           </div>
         </div>
-      </div>
-
-      {/* ================= QUICK INFO ================= */}
-      <div className="flex gap-4 ml-auto">
-        <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 w-[160px] text-center">
-          <div className="text-xs text-gray-500">Account Status</div>
-          <div className="mt-2 text-sm font-bold text-[#21bf06]">
-            ● Active
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 w-[160px] text-center">
-          <div className="text-xs text-gray-500">Support</div>
-          <div className="mt-2 text-sm font-semibold text-[#3b86d1]">
-            support@importo.in
-          </div>
-        </div>
-      </div>
-    </div>
-
-    {/* ================= BOTTOM BAR ================= */}
-    <div className="mt-8 text-center text-xs text-gray-300">
-      © {new Date().getFullYear()} <span className="font-semibold">Importo Logistics</span> —  
-      Built for speed, reliability & growth.
-    </div>
-  </div>
-</footer>
-
+      </footer>
     </div>
   );
 }

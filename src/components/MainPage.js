@@ -140,7 +140,7 @@ function MainPage() {
                                 Get Started
                             </a>
                             <a
-                                href="/about"
+                                href="/#about"
                                 className="px-6 py-3 border border-green-700 text-green-700 font-semibold rounded-lg hover:bg-green-50 transition"
                             >
                                 Learn More →
@@ -243,17 +243,28 @@ function MainPage() {
                             {features.map((feature, index) => (
                                 <div
                                     key={index}
-                                    className="flex flex-col items-center text-center p-6 bg-white rounded-2xl shadow-md transition-transform duration-300 hover:scale-105 hover:shadow-lg"
+                                    className="group flex flex-col items-center text-center p-6 bg-white rounded-2xl shadow-md
+                     border border-green-100 cursor-pointer
+                     transition-all duration-300 hover:shadow-xl hover:scale-105 hover:-translate-y-2 hover:-rotate-1"
                                 >
-                                    <div className="w-16 h-16 flex items-center justify-center rounded-full border-2 border-gray-300 mb-4 text-gray-700">
+                                    <div
+                                        className="w-16 h-16 flex items-center justify-center rounded-2xl mb-4 text-emerald-800
+                       bg-emerald-50 border border-emerald-100 shadow
+                       transition-all duration-300
+                       group-hover:bg-emerald-500 group-hover:text-white group-hover:border-emerald-500
+                       group-hover:shadow-lg group-hover:rotate-3 group-hover:-translate-y-1"
+                                    >
                                         {feature.icon}
                                     </div>
-                                    <p className="text-gray-800 font-semibold">{feature.title}</p>
+                                    <p className="text-gray-800 font-semibold transition-colors duration-300 group-hover:text-emerald-700">
+                                        {feature.title}
+                                    </p>
                                 </div>
                             ))}
                         </div>
                     </div>
                 </section>
+
             </section>
 
             {/* Contact Section */}
@@ -380,43 +391,43 @@ function MainPage() {
                     <div>
                         <h3 className="text-lg font-semibold text-white mb-4">Contact Us</h3>
                         <p className="text-gray-400 text-sm">📍 123 Transport Street, City, India</p>
-                        <p className="text-gray-400 text-sm">📞 +91 98765 43210</p>
+                        <p className="text-gray-400 text-sm">📞 +91 9558798089</p>
                         <p className="text-gray-400 text-sm">✉️ support@importo.com</p>
 
-                        
-                            <div className="flex gap-4">
-                                <button
-                                    type="button"
-                                    aria-label="Website"
-                                    className="text-gray-400 hover:text-green-400 transition bg-transparent p-0"
-                                >
-                                    🌐
-                                </button>
 
-                                <button
-                                    type="button"
-                                    aria-label="Facebook"
-                                    className="text-gray-400 hover:text-green-400 transition bg-transparent p-0"
-                                >
-                                    📘
-                                </button>
+                        <div className="flex gap-4">
+                            <button
+                                type="button"
+                                aria-label="Website"
+                                className="text-gray-400 hover:text-green-400 transition bg-transparent p-0"
+                            >
+                                🌐
+                            </button>
 
-                                <button
-                                    type="button"
-                                    aria-label="Twitter"
-                                    className="text-gray-400 hover:text-green-400 transition bg-transparent p-0"
-                                >
-                                    🐦
-                                </button>
-                            </div>
+                            <button
+                                type="button"
+                                aria-label="Facebook"
+                                className="text-gray-400 hover:text-green-400 transition bg-transparent p-0"
+                            >
+                                📘
+                            </button>
 
+                            <button
+                                type="button"
+                                aria-label="Twitter"
+                                className="text-gray-400 hover:text-green-400 transition bg-transparent p-0"
+                            >
+                                🐦
+                            </button>
                         </div>
-                    </div>
 
-                    <div className="border-t border-gray-700 mt-10 py-6 text-center text-sm text-gray-500">
-                        © {new Date().getFullYear()} <span className="font-semibold text-green-400">Importo</span>.
-                        All rights reserved. | Designed with ❤️ for logistics excellence.
                     </div>
+                </div>
+
+                <div className="border-t border-gray-700 mt-10 py-6 text-center text-sm text-gray-500">
+                    © {new Date().getFullYear()} <span className="font-semibold text-green-400">Importo</span>.
+                    All rights reserved. | Designed with ❤️ for logistics excellence.
+                </div>
             </footer>
 
             {/* Scroll-to-Top Button */}
