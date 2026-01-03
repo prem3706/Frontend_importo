@@ -3,7 +3,7 @@ import axios from "axios";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const COMPANIES_API = "http://localhost/my_app/Backend/api/companies.php";
+const COMPANIES_API = `${process.env.REACT_APP_API_URL}/api/companies.php`;
 
 export default function CompanyCreateForm({ showAlert }) {
   const navigate = useNavigate();

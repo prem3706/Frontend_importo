@@ -4,7 +4,7 @@ import axios from "axios";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
-const API_URL = "http://localhost/my_app/Backend/api/lrs.php";
+const API_URL = `${process.env.REACT_APP_API_URL}/api/lrs.php`;
 
 export default function LRPrintPage() {
   const { lrId } = useParams();

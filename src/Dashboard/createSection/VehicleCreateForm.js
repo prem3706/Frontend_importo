@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import axios from "axios";
 
-const API_URL = "http://localhost/my_app/Backend/api/vehicles.php";
+const API_URL = `${process.env.REACT_APP_API_URL}/api/vehicles.php`;
 
 export default function VehicleForm({ showAlert }) {
   const navigate = useNavigate();

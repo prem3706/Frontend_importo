@@ -14,7 +14,7 @@ import axios from "axios";
  *
  * Update API_URL if your backend path is different.
  */
-const API_URL = "http://localhost/my_app/Backend/api/goods.php";
+const API_URL = `${process.env.REACT_APP_API_URL}/api/goods.php`;
 
 export default function GoodsListPage({ showConfirmDialog, showAlert }) {
   const [goods, setGoods] = useState([]);

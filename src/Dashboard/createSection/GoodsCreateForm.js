@@ -3,7 +3,7 @@ import axios from "axios";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const GOODS_API = "http://localhost/my_app/Backend/api/goods.php";
+const GOODS_API = `${process.env.REACT_APP_API_URL}/api/goods.php`;
 
 export default function GoodsCreateForm({ showAlert }) {
   const navigate = useNavigate();

@@ -11,7 +11,7 @@ import axios from "axios";
  *
  * CHANGE API_URL constant below to your backend endpoint.
  */
-const API_URL = "http://localhost/my_app/Backend/api/vehicles.php";
+const API_URL = `${process.env.REACT_APP_API_URL}/api/vehicles.php`;
 
 export default function VehicleListPage({ showConfirmDialog, showAlert }) {
   const [vehicles, setVehicles] = useState([]);

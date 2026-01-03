@@ -21,7 +21,7 @@ export default function BranchListPage({ showConfirmDialog, showAlert }) {
         const user_id = localStorage.getItem("user_id");
         if (!user_id) return;
         const resp = await axios.get(
-          `http://localhost/my_app/Backend/api/branches.php?user_id=${user_id}`
+          `${process.env.REACT_APP_API_URL}/api/branches.php?user_id=${user_id}`
         );
         setBranches(Array.isArray(resp.data) ? resp.data : []);
       } catch (err) {
@@ -47,7 +47,7 @@ export default function BranchListPage({ showConfirmDialog, showAlert }) {
   const handleDelete = async (branch_id) => {
     try {
       await axios.delete(
-        `http://localhost/my_app/Backend/api/branches.php?branch_id=${branch_id}`
+        `${process.env.REACT_APP_API_URL}/api/branches.php?branch_id=${branch_id}`
       );
       setBranches((prev) => prev.filter((b) => b.branch_id !== branch_id));
       showAlert && showAlert("success", "Branch deleted successfully!");

@@ -403,7 +403,7 @@ export default function UserProfile({ showAlert }) {
     const doLogout = async () => {
       try {
         setBusy(true);
-        await axios.post("http://localhost/my_app/Backend/api/logout.php", {}, { withCredentials: true });
+        await axios.post(`${process.env.REACT_APP_API_URL}/api/logout.php`, {}, { withCredentials: true });
       } catch (err) {
         console.warn(err);
       } finally {

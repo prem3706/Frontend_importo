@@ -16,7 +16,7 @@ const Login = ({ showAlert }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch("http://localhost/my_app/Backend/api/login.php", {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/login.php`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

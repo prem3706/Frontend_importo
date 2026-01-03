@@ -4,12 +4,12 @@ import { ArrowLeft, ChevronDown } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
-const BRANCHES_API = "http://localhost/my_app/Backend/api/branches.php";
-const COMPANIES_API = "http://localhost/my_app/Backend/api/companies.php";
-const VEHICLE_API = "http://localhost/my_app/Backend/api/vehicles.php";
-const GOODS_API = "http://localhost/my_app/Backend/api/goods.php";
-const CREATE_LR_API = "http://localhost/my_app/Backend/api/lrs.php";
-const UPDATE_LR_API = "http://localhost/my_app/Backend/api/lr_update.php";
+const BRANCHES_API = `${process.env.REACT_APP_API_URL}/api/branches.php`;
+const COMPANIES_API = `${process.env.REACT_APP_API_URL}/api/companies.php`;
+const VEHICLE_API = `${process.env.REACT_APP_API_URL}/api/vehicles.php`;
+const GOODS_API = `${process.env.REACT_APP_API_URL}/api/goods.php`;
+const CREATE_LR_API = `${process.env.REACT_APP_API_URL}/api/lrs.php`;
+const UPDATE_LR_API = `${process.env.REACT_APP_API_URL}/api/lr_update.php`;
 
 
 

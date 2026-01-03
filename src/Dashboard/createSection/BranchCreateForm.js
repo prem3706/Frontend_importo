@@ -3,7 +3,7 @@ import axios from "axios";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const BRANCH_API = "http://localhost/my_app/Backend/api/branches.php";
+const BRANCH_API = `${process.env.REACT_APP_API_URL}/api/branches.php`;
 
 export default function BranchForm({ showAlert }) {
   const navigate = useNavigate();

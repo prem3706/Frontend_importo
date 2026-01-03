@@ -20,8 +20,8 @@ export default function CompanyListPage({ showConfirmDialog, showAlert }) {
   const viewRef = useRef(null);
   const navigate = useNavigate();
 
-  const COMPANIES_API = "http://localhost/my_app/Backend/api/companies.php";
-  const DELETE_COMPANY_API = "http://localhost/my_app/Backend/api/companies.php";
+  const COMPANIES_API = `${process.env.REACT_APP_API_URL}/api/companies.php`;
+  const DELETE_COMPANY_API = `${process.env.REACT_APP_API_URL}/api/companies.php`;
 
   useEffect(() => {
     const fetchCompanies = async () => {

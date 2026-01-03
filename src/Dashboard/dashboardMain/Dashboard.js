@@ -35,7 +35,7 @@ export default function Dashboard() {
 
         // 1) check session / get user
         const sess = await axios.get(
-          "http://localhost/my_app/Backend/api/check_session.php",
+          `${process.env.REACT_APP_API_URL}/api/check_session.php`,
           {
             withCredentials: true,
           }
@@ -59,7 +59,7 @@ export default function Dashboard() {
         try {
           const user_id = sess.data.user_id ?? sess.data.id;
           const st = await axios.get(
-            `http://localhost/my_app/Backend/api/dashboard_stats.php?user_id=${user_id}`,
+            `${process.env.REACT_APP_API_URL}/api/dashboard_stats.php?user_id=${user_id}`,
             {
               withCredentials: true,
             }
@@ -111,7 +111,7 @@ export default function Dashboard() {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "http://localhost/my_app/Backend/api/logout.php",
+        `${process.env.REACT_APP_API_URL}/api/logout.php`,
         {},
         { withCredentials: true }
       );

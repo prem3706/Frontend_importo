@@ -37,7 +37,7 @@ function MainPage() {
 
         try {
             const res = await axios.post(
-                "http://localhost/my_app/Backend/api/contact.php",
+                `${process.env.REACT_APP_API_URL}/api/contact.php`,
                 fd
             );
             setAlertType("success");

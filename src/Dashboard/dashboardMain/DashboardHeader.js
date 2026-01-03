@@ -31,7 +31,7 @@ export default function DashboardHeader() {
   useEffect(() => {
     // fetch session/profile info
     axios
-      .get("http://localhost/my_app/Backend/api/check_session.php", {
+      .get(`${process.env.REACT_APP_API_URL}/api/check_session.php`, {
         withCredentials: true,
       })
       .then((res) => {

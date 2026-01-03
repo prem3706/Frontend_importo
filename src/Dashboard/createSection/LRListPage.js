@@ -5,7 +5,7 @@ import { useNavigate ,useLocation} from "react-router-dom";
 import { ArrowLeft, XCircle } from "lucide-react";
 import axios from "axios";
 
-const DEFAULT_API = "http://localhost/my_app/Backend/api/lrs.php";
+const DEFAULT_API = `${process.env.REACT_APP_API_URL}/api/lrs.php`;
 
 export default function LRListPage({
   apiUrl = DEFAULT_API,
