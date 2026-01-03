@@ -34,7 +34,7 @@ function App() {
   const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost/my_app/Backend/api/check_session.php", {
+    fetch(`${process.env.REACT_APP_API_URL}/api/check_session.php`, {
       credentials: "include",
     })
       .then((res) => res.json())
