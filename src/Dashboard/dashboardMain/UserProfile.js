@@ -56,7 +56,7 @@ export default function UserProfile({ showAlert }) {
     (async () => {
       try {
         setLoading(true);
-        const res = await fetch("http://localhost/my_app/Backend/api/user_profile.php", {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/user_profile.php`, {
           credentials: "include",
         });
         const data = await res.json();
@@ -133,7 +133,7 @@ export default function UserProfile({ showAlert }) {
     try {
       setSaving(true);
       const resp = await axios.post(
-        "http://localhost/my_app/Backend/api/update_profile.php",
+        `${process.env.REACT_APP_API_URL}/api/update_profile.php`,
         formData,
         { withCredentials: true, headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -216,7 +216,7 @@ export default function UserProfile({ showAlert }) {
       try {
         setChanging(true);
         const res = await axios.post(
-          "http://localhost/my_app/Backend/api/change_password.php",
+          `${process.env.REACT_APP_API_URL}/api/change_password.php`,
           {
             current_password: currentPassword,
             new_password: newPassword,
@@ -331,7 +331,7 @@ export default function UserProfile({ showAlert }) {
         setBusy(true);
 
         const res = await axios.post(
-          "http://localhost/my_app/Backend/api/delete_account.php",
+          `${process.env.REACT_APP_API_URL}/api/delete_account.php`,
           { password: pwd },
           {
             withCredentials: true,
